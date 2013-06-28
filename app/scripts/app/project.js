@@ -1,4 +1,6 @@
-﻿angular.module("project", ['geodata']).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+﻿var app = angular.module("project", ['geodata']);
+
+app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/map', { controller: MapCtrl, templateUrl: '/map.html' })
         .when('/geo', { controller: GeoCtrl, templateUrl: '/geo.html' })
@@ -10,11 +12,8 @@
 
     var client = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
 
-    var isLoggedIn = client.currentUser !== null;
-
     function GeoCtrl($scope, GeoData) {
         $scope.geoPointList = GeoData.query();
-        console.log(client);
     }
 
     function CreateCtrl($scope, $location, GeoData) {
@@ -30,7 +29,8 @@
         ////$scope.isLoggedIn = client.currentUser !== null;
 
         $scope.loginWithFacebook = function () {
-            if ($scope.isLoggedIn === true) { return; }
+            ////if ($scope.isLoggedIn === true) { return; }
+
             client.login('facebook').then(function (response) {
                 console.log(response);
                 console.log(client.currentUser);
@@ -196,3 +196,12 @@
         };
     }
 }]);
+
+// http://stackoverflow.com/questions/10486769/cannot-get-to-rootscope
+app.run(function ($rootScope) {
+    var client = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
+    $rootScope.isLoggedIn = client.currentUser !== null;
+
+    console.log(client.currentUser);
+    console.log('hello');
+});
