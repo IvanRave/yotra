@@ -1,4 +1,2 @@
-yotra
+Yotra
 =====
-
-Your travel - our trouble
