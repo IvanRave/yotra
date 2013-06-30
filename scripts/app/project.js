@@ -4,52 +4,52 @@
 // There are existing projects which deal with script loading, which may be used with Angular. 
 // Because modules do nothing at load time they can be loaded into the VM in any order 
 // and thus script loaders can take advantage of this property and parallelize the loading process.
-var app = angular.module('project', ['geodata']);
+var app = angular.module('project', ['geodata', 'yotraFilters']);
 
-var client = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
+var wamsClient = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
 
-LoginCtrl.$inject = ['$scope', '$rootScope'];
-function LoginCtrl(fncScope, fncRootScope) {
+////LoginPartialCtrl.$inject = ['$scope'];
+var LoginPartialCtrl = ['$scope', function (fncScope) {
+    fncScope.curUser = null;
 
-    // todo: how to move to global?
-    ////$scope.isLoggedIn = client.currentUser !== null;
+    fncScope.logOnWithFacebook = function () {
+        wamsClient.login('facebook').then(function (response) {
+            ////console.log(response);
+            ////console.log(wamsClient.currentUser);
+            if (!fncScope.$$phase) {
+                fncScope.$apply(function () {
+                    fncScope.curUser = wamsClient.currentUser.userId;
+                    console.log(wamsClient.currentUser);
+                });
+            }
 
-    fncScope.loginWithFacebook = function () {
-        ////if ($scope.isLoggedIn === true) { return; }
-
-        fncRootScope.isLoggedIn = true;
-        console.log(fncRootScope.isLoggedIn);
-
-        ////client.login('facebook').then(function (response) {
-        ////    console.log(response);
-        ////    console.log(client.currentUser);
-        ////    fncRootScope.isLoggedIn = true;
-        ////    fncRootScope.userName = client.currentUser;
-        ////}, function (error) {
-        ////    console.log(error);
-        ////});
+        }, function (error) {
+            console.log(error);
+        });
     };
-}
+}];
 
+// In AngularJS, model values on the scope should always "have a dot", meaning be objects instead of primitives.
+// $routeParams (contains route params: $routeParams.phoneId;)
 app.config(['$routeProvider', function (rpr) {
-    var GeoCtrl = ['$scope', 'GeoData', function ($scope, GeoData) {
-        $scope.geoForm = { pointList: GeoData.query() };
+    var GeoCtrl = ['$scope', 'GeoData', function (angScope, angGeoData) {
+        angScope.geoForm = { pointList: angGeoData.query() };
     }];
 
-    function CreateCtrl($scope, $location, GeoData) {
-        $scope.save = function () {
-            GeoData.save($scope.project, function (project) {
-                $location.path('/geo');
+    var CreateCtrl = ['$scope', '$location', 'GeoData', function (angScope, angLocation, angGeoData) {
+        angScope.save = function () {
+            angGeoData.save(angScope.project, function (project) {
+                angLocation.path('/geo');
             });
         };
-    }
-
-    function MapCtrl($scope) {
+    }];
+    
+    var MapCtrl = ['$scope', function (angScope) {
         var myMap;
 
-        $scope.mapForm = { isMapLoaded: false };
+        angScope.mapForm = { isMapLoaded: false };
 
-        $scope.initialize = function () {
+        angScope.initialize = function () {
             ymaps.ready(function () {
                 if (!ymaps.geolocation) {
                     ymaps.geolocation = {
@@ -68,9 +68,9 @@ app.config(['$routeProvider', function (rpr) {
 
                 myMap.behaviors.enable(["scrollZoom", "dblClickZoom"]);
 
-                if (!$scope.$$phase) {
-                    $scope.$apply(function () {
-                        $scope.mapForm.isMapLoaded = true;
+                if (!angScope.$$phase) {
+                    angScope.$apply(function () {
+                        angScope.mapForm.isMapLoaded = true;
                     });
                 }
 
@@ -162,8 +162,8 @@ app.config(['$routeProvider', function (rpr) {
             }, onGeoXmlLoadError);
         }
 
-        $scope.findPlace = function () {
-            if ($scope.mapForm.isMapLoaded === true) {
+        angScope.findPlace = function () {
+            if (angScope.mapForm.isMapLoaded === true) {
                 ymaps.geocode($scope.startPointName, { results: 1 }).then(function (res) {
                     var firstGeoObject = res.geoObjects.get(0);
                     if (firstGeoObject !== null) {
@@ -197,26 +197,18 @@ app.config(['$routeProvider', function (rpr) {
                 });
             }
         };
-    }
+    }];
 
     rpr.when('/map', { controller: MapCtrl, templateUrl: '/map.html' })
         .when('/geo', { controller: GeoCtrl, templateUrl: '/geo.html' })
         .when('/create', { controller: CreateCtrl, templateUrl: '/create.html' })
-        .when('/login', { controller: LoginCtrl, templateUrl: '/login.html' })
-        .otherwise({ redirectTo: '/map' });
+        .otherwise({ redirectTo: '/geo' });
 
     ////$locationProvider.html5Mode(true);
 }]);
 
 app.run(function ($rootScope) {
-    //var client = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
-    $rootScope.isLoggedIn = client.currentUser !== null;
-
-    // console.log(GeoCtrl);
-    ////GeoCtrl.$inject(['$scope', 'GeoData']);
-
-    console.log(client.currentUser);
-    console.log('hello');
+    console.log($rootScope);
 });
 // =========== config block ===========
 // Only providers and constants can be injected into configuration blocks
