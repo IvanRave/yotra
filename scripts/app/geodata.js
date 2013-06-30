@@ -1,10 +1,33 @@
-﻿angular.module('geodata', ['ngResource']).factory('GeoData', function ($resource) {
+﻿// http://docs.angularjs.org/api/ngResource.$resource
+angular.module('geodata', ['ngResource']).factory('GeoData', function ($resource) {
+
+    // Usage: $resource(url[, paramDefaults][, actions]);
     var self = $resource('https://rave-mobile.azure-mobile.net/api/geopoint/:Id',
-        {}, {}
+        { }, {
+            // default:
+            //  'get':    {method:'GET'},
+            //  'save':   {method:'POST'},
+            //  'query':  {method:'GET', isArray:true},
+            //  'remove': {method:'DELETE'},
+            //   'delete': {method:'DELETE'} }
+            // PUT or PATH
+            save: {
+                method: 'POST',
+                isArray: false,
+                headers: {
+                    // This is the Application Key of your Azure Mobile Service. This optional if you set the Table permission to Everyone.
+                    'X-ZUMO-APPLICATION': sessionStorage.applicationKey,
+                    'X-ZUMO-AUTH': sessionStorage.currentUser ? JSON.parse(sessionStorage.currentUser).mobileServiceAuthenticationToken : null,
+                    'X-ZUMO-VERSION': sessionStorage.version
+                    // X-ZUMO-INSTALLATION-ID – This is ID of your Windows 8 app. We can send any GUID in this header. This is optional. (Thanks Josh Twist for the update)
+                }
+            },
+            update: { method: 'PUT' }
+        }
     );
 
     ////var self = $resource('http://api-yotra.azurewebsites.net/api/geopoint/:Id',
-    ////    {}, {}
+    ////    { Id: 123 }, {}
     ////);
 
     ////var self = $resource('https://api.mongolab.com/api/1/databases' +

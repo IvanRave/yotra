@@ -10,8 +10,10 @@
     <div id="wrap">
         <div class="container">
             <div ng-controller="LoginPartialCtrl">
-                <span>{{curUser}}</span>
-                <div ng-show="curUser === null">
+                <div ng-show="currentUser">
+                    <span>{{currentUser.userId}}</span>
+                </div>
+                <div ng-show="!currentUser">
                     <form ng-submit="logOnWithFacebook()">
                         <button type="submit" class="btn">Login with Facebook</button>
                     </form>

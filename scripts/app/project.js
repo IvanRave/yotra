@@ -8,21 +8,33 @@ var app = angular.module('project', ['geodata', 'yotraFilters']);
 
 var wamsClient = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
 
+sessionStorage.applicationKey = wamsClient.applicationKey;
+sessionStorage.version = wamsClient.version;
+
+console.log(wamsClient);
+
 ////LoginPartialCtrl.$inject = ['$scope'];
 var LoginPartialCtrl = ['$scope', function (fncScope) {
-    fncScope.curUser = null;
+    ////console.log(sessionStorage);
+
+    if (sessionStorage.currentUser) {
+        fncScope.currentUser = JSON.parse(sessionStorage.currentUser);
+    }
 
     fncScope.logOnWithFacebook = function () {
+        // microsoftaccount, facebook, twitter, google
         wamsClient.login('facebook').then(function (response) {
+            sessionStorage.currentUser = JSON.stringify(response);
+            console.log(sessionStorage);
+            console.log(response);
             ////console.log(response);
             ////console.log(wamsClient.currentUser);
             if (!fncScope.$$phase) {
                 fncScope.$apply(function () {
-                    fncScope.curUser = wamsClient.currentUser.userId;
-                    console.log(wamsClient.currentUser);
+                    fncScope.currentUser = response;
+                    ////console.log(wamsClient.currentUser);
                 });
             }
-
         }, function (error) {
             console.log(error);
         });
@@ -43,7 +55,7 @@ app.config(['$routeProvider', function (rpr) {
             });
         };
     }];
-    
+
     var MapCtrl = ['$scope', function (angScope) {
         var myMap;
 
