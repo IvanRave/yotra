@@ -7,7 +7,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="project in geoPointList | orderBy:'Name'">
+        <tr ng-repeat="project in geoForm.pointList | orderBy:'Name'">
             <td><a href="{{project.id}}" target="_blank">{{project.text}}</a></td>
             <td>{{project.createdAt}}</td>
         </tr>

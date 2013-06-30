@@ -9,8 +9,13 @@
 <body>
     <div id="wrap">
         <div class="container">
-            <div ng-show="isLoggedIn">Logged in</div>
-            <div ng-show="!isLoggedIn">Not logged in</div>
+            <!--<div ng-show="$rootScope.isLoggedIn">
+                Logged in
+                <span>{{$rootScope.userName}}</span>
+            </div>
+            <div ng-show="!$rootScope.isLoggedIn">
+                <a href="#/login">Login</a>
+            </div>-->
             <div ng-view></div>
         </div>
         <div id="push"></div>
@@ -24,9 +29,9 @@
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/angular.min.js"></script>
     <script src="scripts/angular-resource.min.js"></script>
-    <script src='https://rave-mobile.azure-mobile.net/client/MobileServices.Web-1.0.0.min.js'></script>
+    <script src="https://rave-mobile.azure-mobile.net/client/MobileServices.Web-1.0.0.min.js"></script>
     <script src="scripts/app/project.js"></script>
     <script src="scripts/app/geodata.js"></script>
-    <!--<script src="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>-->
+    <script src="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
 </body>
 </html>
