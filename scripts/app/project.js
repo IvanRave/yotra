@@ -8,50 +8,71 @@ var app = angular.module('project', ['geodata', 'yotraFilters']);
 
 var wamsClient = new WindowsAzure.MobileServiceClient('https://rave-mobile.azure-mobile.net/', 'cJVLPsElKKsvBvtlYLKJwPgBzkFPmk65');
 
-sessionStorage.applicationKey = wamsClient.applicationKey;
-sessionStorage.version = wamsClient.version;
+localStorage.applicationKey = wamsClient.applicationKey;
+localStorage.version = wamsClient.version;
 
 console.log(wamsClient);
 
 ////LoginPartialCtrl.$inject = ['$scope'];
 var LoginPartialCtrl = ['$scope', function (fncScope) {
-    ////console.log(sessionStorage);
+    ////console.log(localStorage);
 
-    if (sessionStorage.currentUser) {
-        fncScope.currentUser = JSON.parse(sessionStorage.currentUser);
+    if (localStorage.currentUser) {
+        fncScope.currentUser = JSON.parse(localStorage.currentUser);
     }
 
     fncScope.logOnWithFacebook = function () {
         // microsoftaccount, facebook, twitter, google
         wamsClient.login('facebook').then(function (response) {
-            sessionStorage.currentUser = JSON.stringify(response);
-            console.log(sessionStorage);
-            console.log(response);
+            localStorage.currentUser = JSON.stringify(response);
+            location.reload();
+            ////console.log(localStorage);
             ////console.log(response);
-            ////console.log(wamsClient.currentUser);
-            if (!fncScope.$$phase) {
-                fncScope.$apply(function () {
-                    fncScope.currentUser = response;
-                    ////console.log(wamsClient.currentUser);
-                });
-            }
+            ////////console.log(response);
+            ////////console.log(wamsClient.currentUser);
+            ////if (!fncScope.$$phase) {
+            ////    fncScope.$apply(function () {
+            ////        fncScope.currentUser = response;
+            ////        ////console.log(wamsClient.currentUser);
+            ////    });
+            ////}
         }, function (error) {
             console.log(error);
         });
     };
+
+    fncScope.logout = function () {
+        console.log('logout');
+        wamsClient.logout();
+        localStorage.currentUser = '';
+        location.reload();
+    }
 }];
 
 // In AngularJS, model values on the scope should always "have a dot", meaning be objects instead of primitives.
 // $routeParams (contains route params: $routeParams.phoneId;)
 app.config(['$routeProvider', function (rpr) {
+    var LeafletMapCtrl = ['$scope', function (angScope) {
+        var leafletMap = L.map('leaflet_map').setView([51.505, -0.09], 13);
+
+        L.tileLayer('http://{s}.tile.cloudmade.com/cf96818502834f14a74a10eabf87c129/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            maxZoom: 18
+        }).addTo(leafletMap);
+    }];
+
     var GeoCtrl = ['$scope', 'GeoData', function (angScope, angGeoData) {
         angScope.geoForm = { pointList: angGeoData.query() };
     }];
 
     var CreateCtrl = ['$scope', '$location', 'GeoData', function (angScope, angLocation, angGeoData) {
         angScope.save = function () {
+            var authToken = localStorage.currentUser ? JSON.parse(localStorage.currentUser).mobileServiceAuthenticationToken : 'testToken';
+            // Resource.action([parameters], postData, [success], [error])
             angGeoData.save(angScope.project, function (project) {
                 angLocation.path('/geo');
+            }, function (error) {
+                alert(error);
             });
         };
     }];
@@ -214,13 +235,14 @@ app.config(['$routeProvider', function (rpr) {
     rpr.when('/map', { controller: MapCtrl, templateUrl: '/map.html' })
         .when('/geo', { controller: GeoCtrl, templateUrl: '/geo.html' })
         .when('/create', { controller: CreateCtrl, templateUrl: '/create.html' })
-        .otherwise({ redirectTo: '/geo' });
+        .when('/leafletmap', { controller: LeafletMapCtrl, templateUrl: '/leafletmap.html' })
+        .otherwise({ redirectTo: '/leafletmap' });
 
     ////$locationProvider.html5Mode(true);
 }]);
 
 app.run(function ($rootScope) {
-    console.log($rootScope);
+    ////console.log($rootScope);
 });
 // =========== config block ===========
 // Only providers and constants can be injected into configuration blocks

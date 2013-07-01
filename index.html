@@ -4,6 +4,10 @@
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="content/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="content/leaflet.min.css" rel="stylesheet" />
+    <!--[if lte IE 8]>
+        <link href="content/leaflet.ie.min.css"  rel="stylesheet" />
+    <![endif]-->
     <link href="content/site.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -12,6 +16,7 @@
             <div ng-controller="LoginPartialCtrl">
                 <div ng-show="currentUser">
                     <span>{{currentUser.userId}}</span>
+                    <button type="button" class="btn" ng-click="logout()">Logout</button>
                 </div>
                 <div ng-show="!currentUser">
                     <form ng-submit="logOnWithFacebook()">
@@ -37,5 +42,6 @@
     <script src="scripts/app/filters.js"></script>
     <script src="scripts/app/project.js"></script>
     <script src="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
+    <script src="scripts/leaflet.min.js"></script>
 </body>
 </html>

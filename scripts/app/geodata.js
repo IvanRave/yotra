@@ -3,7 +3,7 @@ angular.module('geodata', ['ngResource']).factory('GeoData', function ($resource
 
     // Usage: $resource(url[, paramDefaults][, actions]);
     var self = $resource('https://rave-mobile.azure-mobile.net/api/geopoint/:Id',
-        { }, {
+        {}, {
             // default:
             //  'get':    {method:'GET'},
             //  'save':   {method:'POST'},
@@ -13,12 +13,15 @@ angular.module('geodata', ['ngResource']).factory('GeoData', function ($resource
             // PUT or PATH
             save: {
                 method: 'POST',
+                // url params
+                ////params: { 'mytext': '@text' },
                 isArray: false,
                 headers: {
                     // This is the Application Key of your Azure Mobile Service. This optional if you set the Table permission to Everyone.
-                    'X-ZUMO-APPLICATION': sessionStorage.applicationKey,
-                    'X-ZUMO-AUTH': sessionStorage.currentUser ? JSON.parse(sessionStorage.currentUser).mobileServiceAuthenticationToken : null,
-                    'X-ZUMO-VERSION': sessionStorage.version
+                    'X-ZUMO-APPLICATION': localStorage.applicationKey,
+                    // TODO: change dynamically or refresh page
+                    'X-ZUMO-AUTH': localStorage.currentUser ? JSON.parse(localStorage.currentUser).mobileServiceAuthenticationToken : null,
+                    'X-ZUMO-VERSION': localStorage.version
                     // X-ZUMO-INSTALLATION-ID – This is ID of your Windows 8 app. We can send any GUID in this header. This is optional. (Thanks Josh Twist for the update)
                 }
             },
