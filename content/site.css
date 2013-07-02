@@ -44,3 +44,8 @@ body {
     .container .credit {
         margin: 20px 0;
     }
+
+    .map-size{
+        width: 680px; 
+        height: 460px;
+    }

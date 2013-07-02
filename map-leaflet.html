@@ -1,0 +1,8 @@
+﻿<form name="searchForm" ng-submit="findPlace()" class="form-search text-center">
+    <div class="input-append">
+        <input type="text" class="span7 search-query" name="startPointName" ng-model="mapForm.name" required="required" ng-pattern="/^[a-zA-Zа-яА-ЯёЁ\s,.]{3,}$/" pattern="^[a-zA-Zа-яА-ЯёЁ\s,.]{3,}$" title="3 or more symbols" autocomplete="off" />
+        <button type="submit" class="btn btn-primary" ng-disabled="searchForm.$invalid">Find</button>
+    </div>
+</form>
+<button type="button" class="btn" ng-click="buildRouteList()">Build route</button>
+<div id="map_leaflet" class="map-size"></div>

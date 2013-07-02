@@ -52,15 +52,6 @@ var LoginPartialCtrl = ['$scope', function (fncScope) {
 // In AngularJS, model values on the scope should always "have a dot", meaning be objects instead of primitives.
 // $routeParams (contains route params: $routeParams.phoneId;)
 app.config(['$routeProvider', function (rpr) {
-    var LeafletMapCtrl = ['$scope', function (angScope) {
-        var leafletMap = L.map('leaflet_map').setView([51.505, -0.09], 13);
-
-        L.tileLayer('http://{s}.tile.cloudmade.com/cf96818502834f14a74a10eabf87c129/997/256/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-            maxZoom: 18
-        }).addTo(leafletMap);
-    }];
-
     var GeoCtrl = ['$scope', 'GeoData', function (angScope, angGeoData) {
         angScope.geoForm = { pointList: angGeoData.query() };
     }];
@@ -77,7 +68,95 @@ app.config(['$routeProvider', function (rpr) {
         };
     }];
 
-    var MapCtrl = ['$scope', function (angScope) {
+    var MapLeafletCtrl = ['$scope', 'GeoCoding', 'GeoRouting', function (angScope, angGeoCoding, angGeoRouting) {
+        angScope.mapForm = {
+            name: '',
+            fullName: '',
+            lat: 47.258469,
+            lon: 9.58625
+        };
+
+        ////var leafletMap = L.map('leaflet_map').setView([51.505, -0.09], 13);
+        // todo: add controls (bottom map, full zoom control)
+        var leafletMap = L.map('map_leaflet').setView([angScope.mapForm.lat, angScope.mapForm.lon], 12);
+
+        L.tileLayer('http://{s}.tile.cloudmade.com/cf96818502834f14a74a10eabf87c129/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            maxZoom: 18
+        }).addTo(leafletMap);
+
+        angScope.buildRouteList = function () {
+            //   L.polyline([
+            //[47.258469, 9.58625], [47.25893, 9.58668], [47.25885, 9.58687], [47.258419, 9.58784], [47.258148, 9.58849], [47.258991, 9.58929], [47.259319, 9.58957], [47.259548, 9.5898], [47.259708, 9.5901], [47.259789, 9.59034], [47.259861, 9.59071], [47.259918, 9.59088], [47.259769, 9.59246], [47.259739, 9.59299], [47.259701, 9.59367], [47.259682, 9.59403], [47.259651, 9.59418], [47.259571, 9.59441], [47.259399, 9.59497], [47.259209, 9.5956], [47.259178, 9.59574], [47.259159, 9.59587], [47.259102, 9.59682], [47.259102, 9.59689], [47.258991, 9.59737], [47.25898, 9.59743], [47.258862, 9.59792], [47.258709, 9.59839], [47.25869, 9.59847], [47.258808, 9.59861], [47.258881, 9.59878], [47.25893, 9.59878], [47.25922, 9.5988], [47.259548, 9.59889], [47.25988, 9.59897], [47.26001, 9.59902], [47.260201, 9.59911], [47.260429, 9.59921], [47.260761, 9.59938], [47.261009, 9.59879]
+            //   ], { color: 'red' }).addTo(leafletMap);
+            
+            angGeoRouting.query({ startLat: angScope.mapForm.lat, startLon: angScope.mapForm.lon, endLat: 48, endLon: 10 }, function (data) {
+                // mapFormmapForm
+                // "total_distance":100930,"total_time":8175
+                var routeArr = data.route_geometry;
+                L.polyline(routeArr, { color: 'green' }).addTo(leafletMap);
+                ////console.log('success');
+                ////console.log(data);
+            }, function (error) {
+                console.log('error');
+                console.log(error);
+            })
+        };
+
+        angScope.findPlace = function () {
+            // todo: improve search by other responses and other sources
+            // https://github.com/olegsmith/leaflet.geocoding/blob/master/leaflet.geocoding.js
+            //// $.ajax({
+            ////     url: 'http://nominatim.openstreetmap.org/search'
+            ////, dataType: 'jsonp'
+            ////, jsonp: 'json_callback'
+            ////, data: {
+            ////    'q': 'London'
+            ////    , 'format': 'json'
+            ////}
+            //// })
+            ////.done(function (data) {
+            ////    console.log('success');
+            ////    console.log(data);
+            ////});
+
+            angGeoCoding.query({ q: angScope.mapForm.name }, function (data) {
+                if (data.length > 0) {
+                    angScope.mapForm.lat = data[0].lat;
+                    angScope.mapForm.lon = data[0].lon;
+                    leafletMap.setView([angScope.mapForm.lat, angScope.mapForm.lon], 12);
+                    ////cb({
+                    ////    query: query
+                    ////    , content: res.display_name
+                    ////    , latlng: new L.LatLng(res.lat, res.lon)
+                    ////    , bounds: new L.LatLngBounds([res.boundingbox[0], res.boundingbox[2]], [res.boundingbox[1], res.boundingbox[3]])
+                    ////});
+                }
+                else {
+                    alert('Place not found');
+                }
+            }, function () {
+                alert('Error');
+                console.log('error');
+                console.log(p);
+            });
+
+            ////, function (response) {
+
+            ////    console.log('data');
+            ////    console.log(response);
+            ////    ////var firstGeoPoint = response.features[0];
+            ////    ////if (firstGeoPoint) {
+            ////    ////    leafletMap.setView(firstGeoPoint.centroid.coordinates, 12);
+            ////    ////}
+            ////}, function (error) {
+            ////    console.log('error');
+            ////    console.log(error);
+            ////});
+        }
+    }];
+
+    var MapYandexCtrl = ['$scope', function (angScope) {
         var myMap;
 
         angScope.mapForm = { isMapLoaded: false };
@@ -92,7 +171,7 @@ app.config(['$routeProvider', function (rpr) {
                     };
                 }
 
-                myMap = new ymaps.Map('map', {
+                myMap = new ymaps.Map('map_yandex', {
                     center: [ymaps.geolocation.latitude, ymaps.geolocation.longitude],
                     zoom: 5
                 });
@@ -232,11 +311,11 @@ app.config(['$routeProvider', function (rpr) {
         };
     }];
 
-    rpr.when('/map', { controller: MapCtrl, templateUrl: '/map.html' })
-        .when('/geo', { controller: GeoCtrl, templateUrl: '/geo.html' })
+    rpr.when('/geo', { controller: GeoCtrl, templateUrl: '/geo.html' })
         .when('/create', { controller: CreateCtrl, templateUrl: '/create.html' })
-        .when('/leafletmap', { controller: LeafletMapCtrl, templateUrl: '/leafletmap.html' })
-        .otherwise({ redirectTo: '/leafletmap' });
+        .when('/map-yandex', { controller: MapYandexCtrl, templateUrl: '/map-yandex.html' })
+        .when('/map-leaflet', { controller: MapLeafletCtrl, templateUrl: '/map-leaflet.html' })
+        .otherwise({ redirectTo: '/map-leaflet' });
 
     ////$locationProvider.html5Mode(true);
 }]);
