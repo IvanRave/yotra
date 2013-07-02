@@ -70,54 +70,59 @@ app.config(['$routeProvider', function (rpr) {
 
     var MapLeafletCtrl = ['$scope', 'GeoCoding', 'GeoRouting', 'GeoFeatureCollection', function (angScope, angGeoCoding, angGeoRouting, angGeoFeatureCollection) {
         angScope.mapForm = {
-            name: '',
+            name: 'Симферополь',
             fullName: '',
-            lat: 45,
-            lon: 0.5
+            lat: 44.9521,
+            lon: 34.10245
             ////lat: 47.258469,
             ////lon: 9.58625
         };
 
         ////var leafletMap = L.map('leaflet_map').setView([51.505, -0.09], 13);
         // todo: add controls (bottom map, full zoom control)
-        var leafletMap = L.map('map_leaflet').setView([angScope.mapForm.lat, angScope.mapForm.lon], 5);
+        var leafletMap = L.map('map_leaflet').setView([angScope.mapForm.lat, angScope.mapForm.lon], 8);
 
         L.tileLayer('http://{s}.tile.cloudmade.com/cf96818502834f14a74a10eabf87c129/997/256/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-            maxZoom: 18
+            maxZoom: 15
         }).addTo(leafletMap);
 
-        angScope.buildRouteList = function () {
+        function buildRouteList(geoJsonObject) {
             //   L.polyline([
             //[47.258469, 9.58625], [47.25893, 9.58668], [47.25885, 9.58687], [47.258419, 9.58784], [47.258148, 9.58849], [47.258991, 9.58929], [47.259319, 9.58957], [47.259548, 9.5898], [47.259708, 9.5901], [47.259789, 9.59034], [47.259861, 9.59071], [47.259918, 9.59088], [47.259769, 9.59246], [47.259739, 9.59299], [47.259701, 9.59367], [47.259682, 9.59403], [47.259651, 9.59418], [47.259571, 9.59441], [47.259399, 9.59497], [47.259209, 9.5956], [47.259178, 9.59574], [47.259159, 9.59587], [47.259102, 9.59682], [47.259102, 9.59689], [47.258991, 9.59737], [47.25898, 9.59743], [47.258862, 9.59792], [47.258709, 9.59839], [47.25869, 9.59847], [47.258808, 9.59861], [47.258881, 9.59878], [47.25893, 9.59878], [47.25922, 9.5988], [47.259548, 9.59889], [47.25988, 9.59897], [47.26001, 9.59902], [47.260201, 9.59911], [47.260429, 9.59921], [47.260761, 9.59938], [47.261009, 9.59879]
             //   ], { color: 'red' }).addTo(leafletMap);
 
-            angGeoRouting.query({ startLat: angScope.mapForm.lat, startLon: angScope.mapForm.lon, endLat: 48, endLon: 10 }, function (data) {
-                if (data.status > 0) {
-                    alert(data.status_message);
-                    // 207 - Can not find the road between points
-                }
-                else {
-                    // mapFormmapForm
-                    // "total_distance":100930,"total_time":8175
-                    var routeArr = data.route_geometry;
-                    L.polyline(routeArr, { color: 'green' }).addTo(leafletMap);
-                }
-                ////console.log('success');
-                ////console.log(data);
-            }, function (error) {
-                console.log('error');
-                console.log(error);
-            })
+            $.each(geoJsonObject.features, function (arrIndex, arrValue) {
+                var featureCoord = arrValue.geometry.coordinates;
+
+                angGeoRouting.query({ startLat: angScope.mapForm.lat, startLon: angScope.mapForm.lon, endLat: featureCoord[1], endLon: featureCoord[0] }, function (data) {
+                    if (data.status > 0) {
+                        alert(data.status_message);
+                        // 207 - Can not find the road between points
+                    }
+                    else {
+                        // mapFormmapForm
+                        // "total_distance":100930,"total_time":8175
+                        var routeArr = data.route_geometry;
+                        L.polyline(routeArr, { color: 'green' }).addTo(leafletMap);
+                        L.circle([featureCoord[1], featureCoord[0]], 20000, { color: '#cc0' }).addTo(leafletMap);
+                    }
+                    ////console.log('success');
+                    ////console.log(data);
+                }, function (error) {
+                    console.log(error);
+                })
+            });
         };
 
         angScope.getFeatureCollection = function () {
             angGeoFeatureCollection.query(function (response) {
-                // response - topojson
-                // convert to geoJson
-                var geoJsonFt = topojson.feature(response, response.objects.collection);
-                console.log(geoJsonFt);
-                L.geoJson(geoJsonFt).addTo(leafletMap);
+                // convert to geoJson from response (topojson)
+                ////var geoJsonFeatureList = topojson.feature(response, response.objects.collection);
+                var geoJsonFeatureList = response;
+                // add points to map
+                ////L.geoJson(geoJsonFeatureList).addTo(leafletMap);
+                buildRouteList(geoJsonFeatureList);
             }, function (error) {
                 console.log(error);
             });
@@ -144,7 +149,7 @@ app.config(['$routeProvider', function (rpr) {
                 if (data.length > 0) {
                     angScope.mapForm.lat = data[0].lat;
                     angScope.mapForm.lon = data[0].lon;
-                    leafletMap.setView([angScope.mapForm.lat, angScope.mapForm.lon], 12);
+                    leafletMap.setView([angScope.mapForm.lat, angScope.mapForm.lon], 8);
                     ////cb({
                     ////    query: query
                     ////    , content: res.display_name

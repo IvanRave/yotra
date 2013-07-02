@@ -1,0 +1,5 @@
+﻿{"type":"FeatureCollection","features":[
+{"type":"Feature","geometry":{"type":"Point", "coordinates": [34.17, 44.50]},"properties": {"prop0": "Yalta"}},
+{"type":"Feature","geometry":{"type":"Point", "coordinates": [35.38, 45.03]},"properties": {"prop0": "Feod"}},
+{"type":"Feature","geometry":{"type":"Point", "coordinates": [34.42, 44.67]},"properties": {"prop0": "Alushta"}}
+]}

@@ -84,7 +84,7 @@ angular.module('geodata', ['ngResource'])
         })
     })
     .factory('GeoFeatureCollection', function ($resource) {
-        var featureCollectionUrl = '/test.topojson';
+        var featureCollectionUrl = '/geodata/krym.geojson';
         return $resource(featureCollectionUrl, {}, {
             query: {
                 method: 'GET',
