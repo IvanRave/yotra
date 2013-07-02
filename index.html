@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html ng-app="project">
 <head>
-    <title></title>
+    <title>Yotra: your travel - our trouble</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="content/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="content/leaflet.min.css" rel="stylesheet" />
@@ -13,7 +13,7 @@
 <body>
     <div id="wrap">
         <div class="container">
-            <div ng-controller="LoginPartialCtrl">
+            <div ng-controller="LoginPartialCtrl" class="text-center">
                 <div ng-show="currentUser">
                     <span>{{currentUser.userId}}</span>
                     <button type="button" class="btn" ng-click="logout()">Logout</button>
@@ -43,5 +43,6 @@
     <script src="scripts/app/project.js"></script>
     <script src="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
     <script src="scripts/leaflet.js"></script>
+    <script src="scripts/topojson.min.js"></script>
 </body>
 </html>

@@ -83,4 +83,12 @@ angular.module('geodata', ['ngResource'])
             }
         })
     })
-
+    .factory('GeoFeatureCollection', function ($resource) {
+        var featureCollectionUrl = '/test.topojson';
+        return $resource(featureCollectionUrl, {}, {
+            query: {
+                method: 'GET',
+                isArray: false
+            }
+        });
+    })
