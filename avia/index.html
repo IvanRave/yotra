@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Avia tickets - search form</title>
+</head>
+<body>
+    <h1>Avia tickets:</h1>
+    <div>
+        <!-- Load external html templates if use routes -->
+    </div>
+    <form data-bind="submit: findTicketList">
+        <fieldset>
+            Departure point:
+            <select name="departure-point" data-bind="options: ActualAirportList, optionsText: 'Name', optionsValue: 'Abbr', value: DepartureAbbr, optionsCaption: 'select...'"></select>
+        </fieldset>
+        <fieldset>
+            Arrival point:
+            <select name="arrival-point" data-bind="options: ActualAirportList, optionsText: 'Name', optionsValue: 'Abbr', value: ArrivalAbbr, optionsCaption: 'select...'"></select>
+        </fieldset>
+        <div data-bind="foreach: TicketViewList">
+            <input name="ticket-view" type="radio" data-bind="value: Id, checked: $parent.SelectedTicketViewId" /><span data-bind="text: Name"></span>
+        </div>
+        <input type="submit" value="Find" data-bind="enable: IsValidSearchForm" />
+    </form>
+
+    <!--<div data-bind="html: SelectedTicketViewHtml">
+
+    </div>-->
+
+    <div data-bind="template: { name: 'some-template', templateUrl: 'template/ticket-view-price.html' }"></div>
+
+    <script src="/scripts/json2.min.js"></script>
+    <script src="/scripts/jquery-2.0.3.min.js"></script>
+    <script src="/scripts/history-js/history.adapter.jquery.js"></script>
+    <!--<script src="/scripts/history-js/history.html4.js"></script>-->
+    <script src="/scripts/history-js/history.js"></script>
+
+    <script src="/scripts/knockout-2.3.0.js"></script>
+    <script src="/scripts/app/avia/datacontext.js"></script>
+    <script src="/scripts/app/avia/model.js"></script>
+    <script src="/scripts/app/avia/view-model.js"></script>
+</body>
+</html>
