@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="/scripts/json2.min.js"></script>
+    <script src="/scripts/jquery-2.0.3.min.js"></script>
+    <script src="/scripts/history-js/history.js"></script>
+    <script src="/scripts/history-js/history.adapter.jquery.js"></script>
+    <!--<script src="scripts/history-js/history.html4.js"></script>-->
+
+    <script type="text/javascript">
+        $(function () {
+            (function (undefined) {
+
+                if (!History.enabled) { return; }
+                ////console.log(History);
+                ////console.log(History.Adapter);
+
+                // Bind to StateChange Event
+                History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
+                    var State = History.getState(); // Note: We are using History.getState() instead of event.state
+                    console.log(State);
+                    ////console.log(History.location);
+                });
+
+                ////// Change our States
+                History.pushState({ state: 1 }, "State 1", "?state=1"); // logs {state:1}, "State 1", "?state=1"
+                ////History.pushState({ state: 2 }, "State 2", "?state=2"); // logs {state:2}, "State 2", "?state=2"
+                ////History.replaceState({ state: 3 }, "State 3", "?state=3"); // logs {state:3}, "State 3", "?state=3"
+                ////History.pushState(null, null, "?state=4"); // logs {}, '', "?state=4"
+                ////History.back(); // logs {state:3}, "State 3", "?state=3"
+                ////History.back(); // logs {state:1}, "State 1", "?state=1"
+                ////History.back(); // logs {}, "Home Page", "?"
+                ////History.go(2); // logs {state:3}, "State 3", "?state=3"
+            })(window);
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
