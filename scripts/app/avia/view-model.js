@@ -1,27 +1,18 @@
 ﻿window.aviaApp.viewModel = (function (ko, datacontext, routeHistory) {
-    // if user write request in url, then 
-    // 1. Get fields from url 
-    // 2. Put to the input fields
-    // 3. Start search
-
-    // 1. Get url
-
-    function createNodeFromHtmlString(htmlString) {
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlString;
-        return tempDiv;
-    }
-
     var self = {
+        // ticket list (true) 
+        // or search form (false)
+        isShowResult: ko.observable(false),
         // can be loaded from server (for input autocomplete)
         ActualAirportList: ko.observableArray(),
         TicketList: ko.observableArray(),
         TicketViewList: datacontext.getTicketViewList(),
-        SelectedTicketViewHtml: ko.observable(),
         SelectedTicketViewId: ko.observable(datacontext.QueryString['ticket-view']),
         DepartureAbbr: ko.observable(datacontext.QueryString['departure-point']),
         ArrivalAbbr: ko.observable(datacontext.QueryString['arrival-point']),
         findTicketList: function () {
+            // load and show ticket list
+            self.isShowResult(true);
             // write encoded string to url
             var redirectUrl = '?departure-point=' + encodeURI(self.DepartureAbbr())
                             + '&arrival-point=' + encodeURI(self.ArrivalAbbr())
@@ -29,18 +20,6 @@
 
             History.pushState({}, null, redirectUrl);
 
-            if (!self.SelectedTicketViewHtml()) {
-                // load template of tickets view
-                datacontext.loadTicketViewTemplate(self.SelectedTicketViewId()).done(function (htmlResponse) {
-                    // apply bindings to all elements in received html
-
-
-                    // save to model property (one time per session)
-                    //self.SelectedTicketViewHtml(htmlResponse);
-
-                   // ko.applyBindings(self);//, createNodeFromHtmlString(self.SelectedTicketViewHtml()));
-                });
-            }
             ////datacontext.getTicketList().done(function (ticketList) {
             ////    console.log(ticketList);
             ////}).fail(function (error) {
@@ -67,9 +46,15 @@
             && self.ArrivalAbbr()
             && self.DepartureAbbr() !== self.ArrivalAbbr()
             && self.SelectedTicketViewId());
-    }),
+    });
 
+    // put airports to the select boxes
     self.fillActualAirportList();
+
+    // if user put all request fields to the url, then show him ready ticket list
+    if (self.IsValidSearchForm()) {
+        self.findTicketList();
+    }
 
     return self;
 })(ko, window.aviaApp.datacontext, History);

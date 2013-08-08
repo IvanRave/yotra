@@ -1,13 +1,15 @@
 ﻿<div class="page-header">
-    <form class="form-search text-center" ng-submit="findPlace()">
-        <div class="input-append">
-            <input type="text" class="span7 search-query" ng-model="startPointName" required="required">
-            <button type="submit" ng-disabled="!mapForm.isMapLoaded" class="btn">Поиск</button>
+    <form ng-submit="findPlace()">
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="startPointName" required="required">
+            <span class="input-group-btn">
+                <button type="submit" ng-disabled="!mapForm.isMapLoaded" class="btn btn-default">Поиск</button>
+            </span>
         </div>
     </form>
 </div>
 <div class="lead">
-    <div class="lead map-size" id="map_yandex" style="position: relative;" ng-init="initialize()">
+    <div class="lead map-size" id="map-yandex" style="position: relative;" ng-init="initialize()">
         <div ng-hide="mapForm.isMapLoaded" style="position: absolute; z-index: 2; top: 45%; width: 100%; text-align: center">Загрузка карты...</div>
     </div>
 </div>

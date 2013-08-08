@@ -70,18 +70,18 @@ window.aviaApp.datacontext = (function (ko) {
 
     /// <summary>Load html for ticket view, choosed by user</summary>
     /// <param name="ticketViewId">Price or schedule or smth. else: show tickets using this view</param>
-    function loadTicketViewTemplate(ticketViewId) {
-        var ticketViewUrl = '/avia/template/ticket-view-' + ticketViewId + '.html';
-        return $.ajax(ticketViewUrl, { type: 'GET' });
-    }
+    ////function loadTicketViewTemplate(ticketViewId) {
+    ////    var ticketViewUrl = '/avia/template/ticket-view-' + ticketViewId + '.html';
+    ////    return $.ajax(ticketViewUrl, { type: 'GET' });
+    ////}
 
     var datacontext = {
         createAirport: createAirport,
         getTicketList: getTicketList,
         getAirportList: getAirportList,
         QueryString: QueryString,
-        getTicketViewList: getTicketViewList,
-        loadTicketViewTemplate: loadTicketViewTemplate
+        getTicketViewList: getTicketViewList
+        ////loadTicketViewTemplate: loadTicketViewTemplate
     };
 
     return datacontext;

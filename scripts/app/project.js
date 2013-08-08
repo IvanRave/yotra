@@ -80,7 +80,7 @@ app.config(['$routeProvider', function (rpr) {
 
         ////var leafletMap = L.map('leaflet_map').setView([51.505, -0.09], 13);
         // todo: add controls (bottom map, full zoom control)
-        var leafletMap = L.map('map_leaflet').setView([angScope.mapForm.lat, angScope.mapForm.lon], 8);
+        var leafletMap = L.map('map-leaflet').setView([angScope.mapForm.lat, angScope.mapForm.lon], 8);
 
         L.tileLayer('http://{s}.tile.cloudmade.com/cf96818502834f14a74a10eabf87c129/997/256/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
@@ -196,7 +196,7 @@ app.config(['$routeProvider', function (rpr) {
                     };
                 }
 
-                myMap = new ymaps.Map('map_yandex', {
+                myMap = new ymaps.Map('map-yandex', {
                     center: [ymaps.geolocation.latitude, ymaps.geolocation.longitude],
                     zoom: 5
                 });
