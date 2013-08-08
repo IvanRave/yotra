@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>JS learn</title>
+    <script>
+        /// extend classes
+        function extend(Child, Parent) {
+            var F = function () { }
+            F.prototype = Parent.prototype
+            Child.prototype = new F()
+            Child.prototype.constructor = Child
+            Child.superclass = Parent.prototype
+        }
+
+        function Transport() {
+            this.maxSpeed;
+        }
+
+        function Plane() {
+            this.name = 'Plane';
+        }
+
+        extend(Plane, Transport);
+
+        var myPlane = new Plane();
+
+        console.log(myPlane.maxSpeed);
+
+    </script>
+</head>
+<body>
+    <!--<script src="/scripts/app/js-learn/inheritance.js"></script>-->
+</body>
+</html>
