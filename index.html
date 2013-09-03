@@ -1,48 +1,42 @@
 ﻿<!DOCTYPE html>
-<html ng-app="project">
+<html>
 <head>
     <title>Yotra: your travel - our trouble</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="content/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="content/bootstrap/bootstrap-glyphicons.css" rel="stylesheet" media="screen">
-    <link href="content/leaflet.min.css" rel="stylesheet" />
-    <!--[if lte IE 8]>
-        <link href="content/leaflet.ie.min.css"  rel="stylesheet" />
-    <![endif]-->
-    <link href="content/site.min.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
 </head>
 <body>
-    <div id="wrap">
-        <div class="container">
-            <div ng-view></div>
-            <div ng-controller="LoginPartialCtrl" class="text-center">
-                <div ng-show="currentUser">
-                    <span>{{currentUser.userId}}</span>
-                    <button type="button" class="btn btn-default btn-mini" ng-click="logout()">Logout</button>
-                </div>
-                <div ng-show="!currentUser">
-                    <form ng-submit="logOnWithFacebook()">
-                        <button type="submit" class="btn btn-default btn-mini">Login with Facebook</button>
-                    </form>
-                </div>
+    <div class="container">
+        <div class="clearfix">
+            <h1 class="pull-left">
+                YOTRA
+            </h1>
+            <h3 class="pull-left">
+                <sup><small>your travel - our trouble</small></sup>
+            </h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                Tickets
+            </div>
+            <div class="col-lg-3">
+                Search
+            </div>
+            <div class="col-lg-3">
+                Map
+            </div>
+            <div class="col-lg-3">
+                Review
             </div>
         </div>
     </div>
-    <div id="footer">
-        <div class="container">
-            <p class="text-muted credit">Your Travel - Our Trouble</p>
-        </div>
-    </div>
-    <script src="scripts/jquery-2.0.3.min.js"></script>
-    <script src="scripts/bootstrap.min.js"></script>
-    <script src="scripts/angular.min.js"></script>
-    <script src="scripts/angular-resource.min.js"></script>
-    <script src="https://rave-mobile.azure-mobile.net/client/MobileServices.Web-1.0.0.min.js"></script>
-    <script src="scripts/app/geodata.js"></script>
-    <script src="scripts/app/filters.js"></script>
-    <script src="scripts/app/project.js"></script>
-    <script src="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
-    <script src="scripts/leaflet.js"></script>
-    <script src="scripts/topojson.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script data-main="scripts/app/main.min" src="scripts/require.min.js"></script>
 </body>
 </html>
