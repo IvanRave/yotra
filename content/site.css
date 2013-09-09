@@ -1,9 +1,26 @@
-﻿.feature-tile {
-    background-color: #ccc;
-    padding: 20px;
+﻿/* variables */
+.feature-tile {
+  background-color: #84c210;
+  color: #efefef;
+  padding: 0 12px 4px 12px;
+  margin-top: 10px;
 }
-
+.feature-tile:hover {
+  background-color: #b6ff00;
+  cursor: pointer;
+  color: #444;
+}
+.feature-tile i {
+  font-size: 5em;
+  line-height: 1.5;
+}
 .map-size {
-    width: 680px;
-    height: 460px;
+  width: 680px;
+  height: 460px;
+}
+.tile-lg {
+  height: 260px;
+}
+.tile-sm {
+  height: 125px;
 }

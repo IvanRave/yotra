@@ -1,0 +1,38 @@
+﻿body {
+}
+/* variables */
+@tile-lg-height: 260px;
+@tile-margin-top: 10px;
+@tile-sm-height: @tile-lg-height/2 - @tile-margin-top/2;
+
+
+.feature-tile {
+    background-color: #84c210;
+    color: #efefef;
+    padding: 0 12px 4px 12px;
+    margin-top: @tile-margin-top;
+}
+
+    .feature-tile:hover {
+        background-color: #b6ff00;
+        cursor: pointer;
+        color: #444;
+    }
+
+    .feature-tile i {
+        font-size: 5em;
+        line-height: 1.5;
+    }
+
+.map-size {
+    width: 680px;
+    height: 460px;
+}
+
+.tile-lg {
+    height: @tile-lg-height;
+}
+
+.tile-sm {
+    height: @tile-sm-height;
+}
