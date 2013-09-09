@@ -4,19 +4,26 @@
 @tile-lg-height: 260px;
 @tile-margin-top: 10px;
 @tile-sm-height: @tile-lg-height/2 - @tile-margin-top/2;
-
+@tile-bg-color: #84c210;
+@tile-font-color: #efefef;
 
 .feature-tile {
-    background-color: #84c210;
-    color: #efefef;
+    background-color: @tile-bg-color;
+    color: @tile-font-color;
     padding: 0 12px 4px 12px;
     margin-top: @tile-margin-top;
+    border: 1px solid @tile-bg-color;
+    -moz-transition: background 0.1s ease, color 0.1s ease;
+    -o-transition: background 0.1s ease, color 0.1s ease;
+    -webkit-transition: background 0.1s ease, color 0.1s ease;
+    transition: background 0.1s ease, color 0.1s ease;
 }
 
     .feature-tile:hover {
-        background-color: #b6ff00;
+        background-color: darken(@tile-bg-color, 5%);
         cursor: pointer;
-        color: #444;
+        color: darken(@tile-font-color, 5%);
+        border: 1px solid @tile-bg-color;
     }
 
     .feature-tile i {

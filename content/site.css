@@ -4,11 +4,17 @@
   color: #efefef;
   padding: 0 12px 4px 12px;
   margin-top: 10px;
+  border: 1px solid #84c210;
+  -moz-transition: background 0.1s ease, color 0.1s ease;
+  -o-transition: background 0.1s ease, color 0.1s ease;
+  -webkit-transition: background 0.1s ease, color 0.1s ease;
+  transition: background 0.1s ease, color 0.1s ease;
 }
 .feature-tile:hover {
-  background-color: #b6ff00;
+  background-color: #74aa0e;
   cursor: pointer;
-  color: #444;
+  color: #e2e2e2;
+  border: 1px solid #84c210;
 }
 .feature-tile i {
   font-size: 5em;
