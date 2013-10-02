@@ -4,7 +4,7 @@
 @tile-lg-height: 260px;
 @tile-margin-top: 10px;
 @tile-sm-height: @tile-lg-height/2 - @tile-margin-top/2;
-@tile-bg-color: #84c210;
+@tile-bg-color: #0094ff; //#84c210;
 @tile-font-color: #efefef;
 
 .feature-tile {
@@ -21,10 +21,15 @@
 
     .feature-tile:hover {
         background-color: darken(@tile-bg-color, 5%);
-        cursor: pointer;
         color: darken(@tile-font-color, 5%);
         border: 1px solid @tile-bg-color;
+        text-decoration:none;
     }
+
+        .feature-tile a:hover {
+            text-decoration: none;
+            cursor: pointer;
+        }
 
     .feature-tile i {
         font-size: 5em;
