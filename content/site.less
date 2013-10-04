@@ -1,5 +1,6 @@
 ﻿body {
 }
+/* D:\GitRepo\yotra\content>lessc site.less -x > site.min.css */
 /* variables */
 @tile-lg-height: 260px;
 @tile-margin-top: 10px;
@@ -23,13 +24,13 @@
         background-color: darken(@tile-bg-color, 5%);
         color: darken(@tile-font-color, 5%);
         border: 1px solid @tile-bg-color;
-        text-decoration:none;
+        text-decoration: none;
     }
 
-        .feature-tile a:hover {
-            text-decoration: none;
-            cursor: pointer;
-        }
+    .feature-tile a:hover {
+        text-decoration: none;
+        cursor: pointer;
+    }
 
     .feature-tile i {
         font-size: 5em;
@@ -47,4 +48,11 @@
 
 .tile-sm {
     height: @tile-sm-height;
+}
+
+.reset-box-sizing,
+.reset-box-sizing * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
 }
