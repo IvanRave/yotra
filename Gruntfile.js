@@ -47,6 +47,12 @@ module.exports = function(grunt) {
           ]
         }]
       },
+    },
+    'gh-pages': {
+        options: {
+          base: 'dist'
+        },
+        src: ['**']
     }
   });
 
@@ -54,7 +60,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-gh-pages');
   
   // Default task.
-  grunt.registerTask('default', ['jshint', 'clean', 'copy:dist']);
+  grunt.registerTask('default', ['jshint', 'clean', 'copy:dist', 'gh-pages']);
 };
