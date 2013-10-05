@@ -11,5 +11,5 @@
 
         angLocationProvider.html5Mode(true).hashPrefix('!');
     }])
-    .run(['$rootScope', function (angRootScope) {
+    .run(['$rootScope', function () {
     }]);
