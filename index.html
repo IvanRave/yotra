@@ -1,11 +1,14 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Yotra: your travel - our trouble</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="content/bootstrap.min.css" />
+    <!-- <link rel="stylesheet/less" href="content/bootstrap.less"> -->
     <link rel="stylesheet" href="content/site.min.css" />
+    <!-- <link rel="stylesheet/less" href="content/site.less">
+    <script src="bower_components/less/dist/less-1.4.2.js"></script> -->
 </head>
 <body ng-app="app">
     <div class="container">
@@ -24,36 +27,21 @@
                 </div>
             </div>
         </div>
-        <div ng-view></div>
+        <div ng-view=""></div>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <!-- Google search tool -->
-    <script src="//www.google.com/jsapi" type="text/javascript"></script>
-    <script type="text/javascript">
-        google.load('search', '1', { language: 'en', style: google.loader.themes.V2_DEFAULT });
-        google.setOnLoadCallback(function () {
-            var customSearchOptions = {};
-            var orderByOptions = {};
-            orderByOptions['keys'] = [{ label: 'Relevance', key: '' }, { label: 'Date', key: 'date' }];
-            customSearchOptions['enableOrderBy'] = true;
-            customSearchOptions['orderByOptions'] = orderByOptions;
-            customSearchOptions['overlayResults'] = true;
-            var customSearchControl = new google.search.CustomSearchControl('003479966203915624554:mm3nqlnbklo', customSearchOptions);
-            customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-            var options = new google.search.DrawOptions();
-            options.setAutoComplete(true);
-            customSearchControl.draw('cse', options);
-        }, true);
-    </script>
+    <script src="//www.google.com/jsapi"></script>
+    <script src="app/google-search-tool.js"></script>
     <!-- Put after Google search tool generating -->
-    <link rel="stylesheet" href="content/search.css" />
+    <link rel="stylesheet" href="content/search.css">
     <!-- Latest angular -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.2/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.2/angular-route.min.js"></script>
-<!--     <script src="app/menu/controllers.js"></script>
+    <!-- <script src="app/menu/controllers.js"></script>
     <script src="app/app.js"></script> -->
     <script src="app/bundle-0.1.0.min.js"></script>
 </body>
