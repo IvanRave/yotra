@@ -1,0 +1,26 @@
+{
+  "name": "yotra",
+  "version": "0.1.0",
+  "homepage": "http://yotra.ru",
+  "authors": [
+    "IvanRave"
+  ],
+  "description": "your travel - our trouble",
+  "license": "MIT",
+  "exportsOverride": {
+    "jquery": {
+      "vendors": "jquery.js"
+    },
+    "qunit": { },
+    "bootstrap": {
+      "vendors": "./dist/js/bootstrap.js"
+    }
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
