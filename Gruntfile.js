@@ -6,6 +6,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         // Metadata
         pkg: grunt.file.readJSON('package.json'),
+        target: target, // Use for <% template in JSON keys
         banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
           '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
           '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
@@ -29,8 +30,12 @@ module.exports = function (grunt) {
         },
         preprocess: {
             all: {
-                src: target + '/index.html',
-                dest: target + '/index.html'
+                files: {
+                    '<%= target %>/index.html': '<%= target %>/index.html',
+                    '<%= target %>/maps/index.html': '<%= target %>/maps/index.html',
+                    '<%= target %>/reviews/index.html': '<%= target %>/reviews/index.html',
+                    '<%= target %>/tickets/index.html': '<%= target %>/tickets/index.html'
+                }
             }
         },
         // Task configuration
@@ -129,7 +134,10 @@ module.exports = function (grunt) {
                     // // process: function(src, filepath) {},
                 },
                 files: {
-                    '<%= folder.dst %>/index.html': '<%= folder.dst %>/index.html'
+                    '<%= folder.dst %>/index.html': '<%= folder.dst %>/index.html',
+                    '<%= folder.dst %>/maps/index.html': '<%= folder.dst %>/maps/index.html',
+                    '<%= folder.dst %>/reviews/index.html': '<%= folder.dst %>/reviews/index.html',
+                    '<%= folder.dst %>/tickets/index.html': '<%= folder.dst %>/tickets/index.html'
                 }
             },
             index_dev: {}
@@ -161,14 +169,13 @@ module.exports = function (grunt) {
                 partials: ['src/tpl/partials/*.hbs'],
                 flatten: true
             },
-            dst: {
+            all: {
                 files: {
-                    'dst/index': ['src/tpl/pages/*.hbs']
+                    '<%= target %>/index': 'src/tpl/pages/index.hbs',
+                    '<%= target %>/maps/index': 'src/tpl/pages/maps/index.hbs',
+                    '<%= target %>/reviews/index': 'src/tpl/pages/reviews/index.hbs',
+                    '<%= target %>/tickets/index': 'src/tpl/pages/tickets/index.hbs'
                 }
-            },
-            dev: {
-                src: ['src/tpl/pages/*.hbs'],
-                dest: 'dev/'
             }
         },
         bower: {
@@ -245,7 +252,7 @@ module.exports = function (grunt) {
      'uglify:script_main_' + target,
      'uglify:google_search_tool_' + target,
      'less:' + target,
-     'assemble:' + target,
+     'assemble:all',
      'env',
      'preprocess',
      'htmlmin:index_' + target
