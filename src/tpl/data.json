@@ -1,5 +1,9 @@
 {
   "name": "Booska",
   "site_title": "Yotra",
-  "site_slogan": "your travel - our trouble"
+  "site_slogan": "your travel - our trouble",
+  "maps": "maps",
+  "reviews": "reviews",
+  "tickets": "tickets",
+  "homePage": "home page"
 }

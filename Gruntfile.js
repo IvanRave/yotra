@@ -30,12 +30,12 @@ module.exports = function (grunt) {
         },
         preprocess: {
             all: {
-                files: {
-                    '<%= target %>/index.html': '<%= target %>/index.html',
-                    '<%= target %>/maps/index.html': '<%= target %>/maps/index.html',
-                    '<%= target %>/reviews/index.html': '<%= target %>/reviews/index.html',
-                    '<%= target %>/tickets/index.html': '<%= target %>/tickets/index.html'
-                }
+                files: [{
+                    expand: true,
+                    cwd: '<%= target %>/',
+                    src: '**/index.html',
+                    dest: '<%= target %>'
+                }]
             }
         },
         // Task configuration
@@ -133,12 +133,12 @@ module.exports = function (grunt) {
                     collapseWhitespace: true
                     // // process: function(src, filepath) {},
                 },
-                files: {
-                    '<%= folder.dst %>/index.html': '<%= folder.dst %>/index.html',
-                    '<%= folder.dst %>/maps/index.html': '<%= folder.dst %>/maps/index.html',
-                    '<%= folder.dst %>/reviews/index.html': '<%= folder.dst %>/reviews/index.html',
-                    '<%= folder.dst %>/tickets/index.html': '<%= folder.dst %>/tickets/index.html'
-                }
+                files: [{
+                    expand: true,
+                    cwd: '<%= target %>/',
+                    src: '**/index.html',
+                    dest: '<%= target %>/'
+                }]
             },
             index_dev: {}
         },
@@ -166,16 +166,16 @@ module.exports = function (grunt) {
             options: {
                 data: 'src/tpl/data.json',
                 layout: 'src/tpl/layouts/default.hbs',
-                partials: ['src/tpl/partials/*.hbs'],
-                flatten: true
+                partials: ['src/tpl/partials/*.hbs']
+                ////flatten: true
             },
             all: {
-                files: {
-                    '<%= target %>/index': 'src/tpl/pages/index.hbs',
-                    '<%= target %>/maps/index': 'src/tpl/pages/maps/index.hbs',
-                    '<%= target %>/reviews/index': 'src/tpl/pages/reviews/index.hbs',
-                    '<%= target %>/tickets/index': 'src/tpl/pages/tickets/index.hbs'
-                }
+                files: [{
+                    expand: true,
+                    cwd: 'src/tpl/pages/',
+                    src: '**/*.hbs',
+                    dest: '<%= target %>'
+                }]
             }
         },
         bower: {
