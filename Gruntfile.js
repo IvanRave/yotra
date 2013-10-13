@@ -184,7 +184,11 @@ module.exports = function (grunt) {
                     targetDir: 'dev/js/'
                 }
             },
-            dst: {}
+            dst: {
+                options: {
+                    targetDir: 'dst/js/'
+                }
+            }
         },
         // // watch: {
         // // files: ['**.*.js'],

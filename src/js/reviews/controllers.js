@@ -1,9 +1,11 @@
-﻿angular.module('ang-reviews-controllers', [])
-    .controller('ReviewsCtrl', ['$scope', function (angScope) {
+﻿angular.module('controllers', ['factories'])
+    .controller('PlaceReviewsCtrl', ['$scope', 'PlaceReviewsFactory', function (angScope, placeReviewsFactory) {
         'use strict';
 
-        angScope.todoList = [
-            { text: 'learn angular', done: true },
-            { text: 'build an angular app', done: false }];
+        angScope.placeList = [];
+
+        placeReviewsFactory.get({}, function (res) {
+            angScope.placeList = res["places"];
+        });
 
     }]);
