@@ -5,8 +5,10 @@
         angScope.placeList = [];
 
         jQuery.ajax({ url: 'http://yotra.azurewebsites.net/api/reviews/' }).done(function (res) {
-            console.log(res);
-            angScope.placeList = res["places"];
+            console.log('send req');
+            angScope.$apply(function () {
+                angScope.placeList = res["places"];
+            });
         });
 
         ////angHttp.defaults.useXDomain = true;

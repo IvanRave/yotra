@@ -1,3 +1,7 @@
+// https://github.com/jaubourg/ajaxHooks/blob/master/src/xdr.js
+// http://www.eriwen.com/javascript/how-to-cors/
+// http://api.brain-map.org/examples/doc/scatter/javascripts/jquery.ie.cors.js.html
+// https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest/blob/8754607e5f9ab73ccc37246f0c12fed14f85bd28/jQuery.XDomainRequest.js
 if (window.XDomainRequest) {
     jQuery.ajaxTransport(function (s) {
         if (s.crossDomain && s.async) {
