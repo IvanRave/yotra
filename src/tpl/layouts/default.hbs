@@ -30,27 +30,25 @@
 
     <!-- @if NODE_ENV == 'dev' --><script src="/js/vendors/jquery/jquery.js"></script><!-- @endif -->
     <!-- @if NODE_ENV == 'dst' --><script src="//code.jquery.com/jquery-2.0.3.min.js"></script><!-- @endif -->
+	<script src="/js/jquery.x-domain-request.js"></script>
     <!-- @if NODE_ENV == 'dev' --><script src="/js/vendors/bootstrap/bootstrap.js"></script><!-- @endif -->
     <!-- @if NODE_ENV == 'dst' --><script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script><!-- @endif -->
     <!-- Google search tool -->
-    <script src="//www.google.com/jsapi"></script>
-
-    <!-- @if NODE_ENV == 'dev' --><script src="/js/google-search-tool.js"></script><!-- @endif -->
-    <!-- @if NODE_ENV == 'dst' --><script src="/js/google-search-tool.min.js"></script><!-- @endif -->
-    <!-- Put after Google search tool generating -->
-    <!-- @if NODE_ENV == 'dev' --><link rel="stylesheet" href="/css/search.css" /><!-- @endif -->
-    <!-- @if NODE_ENV == 'dst' --><link rel="stylesheet" href="/css/search.css" /><!-- @endif -->
-	
-	<!-- @if NODE_ENV == 'dev' -->
-	{{#page_scripts.dev }}
-	<script src="{{.}}"></script>
-	{{/page_scripts.dev }}
-	<!-- @endif -->
-
 	<!-- @if NODE_ENV == 'dst' -->
-	{{#page_scripts.dst }}
-	<script src="{{.}}"></script>
-	{{/page_scripts.dst }}
+    <script src="//www.google.com/jsapi"></script>
+    <script src="/js/google-search-tool.min.js"></script>
+    <link rel="stylesheet" href="/css/search.css" />
 	<!-- @endif -->
+
+    <!-- @if NODE_ENV == 'dev' -->
+    {{#page_scripts.dev }}
+    <script src="{{.}}"></script>
+    {{/page_scripts.dev }}
+    <!-- @endif -->
+    <!-- @if NODE_ENV == 'dst' -->
+    {{#page_scripts.dst }}
+    <script src="{{.}}"></script>
+    {{/page_scripts.dst }}
+    <!-- @endif -->
 </body>
 </html>

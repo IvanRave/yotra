@@ -17,6 +17,10 @@ page_scripts:
 <h1>{{titleize reviews}}</h1>
 <div ng-app="project">
     <div ng-controller="PlaceReviewsCtrl">
+		<div>
+			<button class="btn btn-default" ng-click="getPlaces()">Get places</button>
+		</div>
+
 		<div ng-repeat="place in placeList" itemscope itemtype="http://schema.org/Place">
 			<h3 ng-bind="place.name" itemprop="name"></h3>
 			<h4 ng-bind="place.description" itemprop="description"></h4>

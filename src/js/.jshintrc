@@ -11,5 +11,6 @@
   "boss": true,
   "eqnull": true,
   "node": true,
-  "predef": ["angular", "google"]
+  "browser": true,
+  "predef": ["jQuery", "angular", "google", "XDomainRequest", "ActiveXObject"]
 }

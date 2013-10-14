@@ -1,5 +1,7 @@
 ﻿angular.module('factories', ['ngResource'])
-    .factory('PlaceReviewsFactory', ['$resource', function (angResource) {
+    .factory('PlaceReviewsFactory', ['$http', '$resource', function (angHttp, angResource) {
+        angHttp.defaults.useXDomain = true;
+
         return angResource('http://yotra.azurewebsites.net/api/reviews/',
                     {}, {
                         // default:
