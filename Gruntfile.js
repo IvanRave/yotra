@@ -18,7 +18,6 @@ module.exports = function (grunt) {
           ' Licensed <%= pkg.license %> */\n',
         //// http://lodash.com/docs/#pluck
         //// ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
-        uniqueString: '<%= pkg.version %>',
         bowerFolder: 'bower_components',
         // Task configuration
         clean: {
@@ -39,36 +38,23 @@ module.exports = function (grunt) {
                 src: ['<%= src %>/js/**/*.js']
             }
         },
-        // js files concat and minify in Uglify
-        // Concat other file types
-        concat: {
-            options: {
-                separator: ';',
-                banner: '<%= banner %>'
-                //// process: function(src, filepath) {
-                //// return '// Source: ' + filepath + '\n' +
-                //// src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
-                //// },
-                //// stripBanners: true
-            },
-            dst: {
-                // // src: ['<%= src %>/js/menu/controllers.js', '<%= src %>/js/app.js'],
-                // // dest: '<%= trgt %>/js/bundle-<%= uniqueString %>.js',
-                // // nonull: true
-            },
-            dev: {}
-        },
         // Only for prod mode
         uglify: {
             script_main: {
                 options: {
                     // // banner: '<%= banner %>',
-                    // sourceMap: '<%= trgt %>/js/bundle-<%= uniqueString %>.min.js.map',
-                    // sourceMappingURL: 'bundle-<%= uniqueString %>.min.js.map',
+                    // sourceMap: '<%= trgt %>/js/bundle-<%= package.version %>.min.js.map',
+                    // sourceMappingURL: 'bundle-<%= package.version %>.min.js.map',
                     // sourceMapPrefix: 2
                 },
                 files: {
-                    '<%= trgt %>/js/bundle-<%= uniqueString %>.min.js': ['<%= trgt %>/js/menu/controllers.js', '<%= trgt %>/js/app.js']
+                    '<%= trgt %>/js/lib-bundle-<%= package.version %>.min.js': [
+                        '<%= trgt %>/js/es5-shim.js', 
+                        '<%= trgt %>/js/jquery.js',
+                        '<%= trgt %>/js/angular.js',
+                        '<%= trgt %>/js/angular-resource.js'
+                    ],
+                    '<%= trgt %>/js/bundle-<%= package.version %>.min.js': ['<%= trgt %>/js/menu/controllers.js', '<%= trgt %>/js/app.js']
                 }
             },
             google_search_tool: {
@@ -99,7 +85,7 @@ module.exports = function (grunt) {
                     flatten: true,
                     cwd: '<%= bowerFolder %>/',
                     dest: '<%= trgt %>/js/',
-                    src: ['es5-shim/es5-shim.js', 'jquery/jquery.js']
+                    src: ['es5-shim/es5-shim.js', 'jquery/jquery.js', 'angular/angular.js', 'angular-resource/angular-resource.js']
                 }]
             },
             bower_css: {
@@ -152,7 +138,7 @@ module.exports = function (grunt) {
         assemble: {
             options: {
                 engine: 'handlebars',
-                data: '<%= src %>/tpl/data.json',
+                data: ['<%= src %>/tpl/data.json', 'package.json'],
                 conf: {
                     isProd: isProd
                 }
@@ -247,10 +233,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-less');
-    //// grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('assemble');
     // for dev

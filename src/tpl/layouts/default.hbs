@@ -20,22 +20,25 @@
         </footer>
     </div>
 
-    <script src="/js/es5-shim.js"></script>
-
-    {{#if conf.isProd}}
-    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-    {{else}}
+	{{#if conf.isProd}}
+	<script src="/js/lib-bundle-{{package.version}}.min.js"></script>
+	{{else}}
+	<script src="/js/es5-shim.js"></script>
 	<script src="/js/jquery.js"></script>
+	<script src="/js/jquery.x-domain-request.js"></script>
+	<script src="/js/angular.js"></script>
+	<script src="/js/angular-resource.js"></script>
 	{{/if}}
 
-    <script src="/js/jquery.x-domain-request.js"></script>
     <!--<script src="/js/bootstrap.js"></script>-->
+
     <!-- Google search tool -->
     {{#if conf.isProd}}
     <script src="//www.google.com/jsapi"></script>
     <script src="/js/google-search-tool.min.js"></script>
     <link rel="stylesheet" href="/css/search.css" />
     {{/if}}
+
     {{#if conf.isProd}}
 	{{#page_scripts.dst }}
     <script src="{{.}}"></script>
