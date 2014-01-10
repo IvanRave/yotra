@@ -1,4 +1,4 @@
-﻿angular.module('factories', ['ngResource'])
+angular.module('factories', ['ngResource'])
     .factory('PlaceReviewsFactory', ['$http', '$resource', function (angHttp, angResource) {
         angHttp.defaults.useXDomain = true;
 

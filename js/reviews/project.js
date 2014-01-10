@@ -1,1 +1,1 @@
-﻿angular.module('project', ['controllers']);
+angular.module('project', ['controllers']);

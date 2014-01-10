@@ -1,4 +1,4 @@
-﻿google.load('search', '1', { language: 'en', style: google.loader.themes.V2_DEFAULT });
+google.load('search', '1', { language: 'en', style: google.loader.themes.V2_DEFAULT });
 google.setOnLoadCallback(function () {
     var customSearchOptions = {};
     var orderByOptions = {};
