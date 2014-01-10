@@ -9,19 +9,9 @@
   "license": "MIT",
   "devDependencies": {
     "jquery": "2.0.3",
-    "bootstrap": "3.0.0",
-    "qunit": "1.12.0",
-    "angular": "1.2.0-rc.2",
-    "angular-resource": "1.2.0-rc.2"
-  },
-  "exportsOverride": {
-    "jquery": {
-      "vendors": "jquery.js"
-    },
-    "qunit": { },
-    "bootstrap": {
-      "vendors": "./dist/js/bootstrap.js"
-    }
+    "angular": "1.2.7",
+    "angular-resource": "1.2.7",
+    "es5-shim": "~2.3.0"
   },
   "ignore": [
     "**/.*",

@@ -1,12 +1,16 @@
 module.exports = function (grunt) {
     'use strict';
-    // dev or dst
-    var target = grunt.option('trg') || 'dev';
+    
+    var isProd = grunt.option('prod') ? true : false;
+    
+    var trgt = isProd ? 'dst' : 'dev';
+    
     // Project configuration
     grunt.initConfig({
         // Metadata
         pkg: grunt.file.readJSON('package.json'),
-        target: target, // Use for <% template in JSON keys
+        src: 'src',
+        trgt: trgt, // Use for <% template in JSON keys
         banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
           '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
           '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
@@ -15,32 +19,10 @@ module.exports = function (grunt) {
         //// http://lodash.com/docs/#pluck
         //// ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
         uniqueString: '<%= pkg.version %>',
-        folder: {
-            src: 'src', // Source
-            dev: 'dev', // Development
-            dst: 'dst' // Distributive
-        },
-        env: {
-            options: {
-                // Shared options hash
-            },
-            all: {
-                NODE_ENV: target
-            }
-        },
-        preprocess: {
-            all: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= target %>/',
-                    src: '**/index.html',
-                    dest: '<%= target %>'
-                }]
-            }
-        },
+        bowerFolder: 'bower_components',
         // Task configuration
         clean: {
-            all: [target]
+            all: [trgt]
         },
         jshint: {
             gruntfile: {
@@ -49,12 +31,12 @@ module.exports = function (grunt) {
                 },
                 src: 'Gruntfile.js'
             },
-            appScripts: {
+            app: {
                 options: {
-                    jshintrc: '<%= folder.src %>' + '/js/.jshintrc'
+                    jshintrc: '<%= src %>' + '/js/.jshintrc'
                 },
                 // all js files in js folder
-                src: ['<%= folder.src %>/js/**/*.js']
+                src: ['<%= src %>/js/**/*.js']
             }
         },
         // js files concat and minify in Uglify
@@ -70,138 +52,171 @@ module.exports = function (grunt) {
                 //// stripBanners: true
             },
             dst: {
-                // // src: ['<%= folder.src %>/js/menu/controllers.js', '<%= folder.src %>/js/app.js'],
-                // // dest: '<%= folder.dst %>/js/bundle-<%= uniqueString %>.js',
+                // // src: ['<%= src %>/js/menu/controllers.js', '<%= src %>/js/app.js'],
+                // // dest: '<%= trgt %>/js/bundle-<%= uniqueString %>.js',
                 // // nonull: true
             },
             dev: {}
         },
+        // Only for prod mode
         uglify: {
-            script_main_dst: {
+            script_main: {
                 options: {
                     // // banner: '<%= banner %>',
-                    // sourceMap: '<%= folder.dst %>/js/bundle-<%= uniqueString %>.min.js.map',
+                    // sourceMap: '<%= trgt %>/js/bundle-<%= uniqueString %>.min.js.map',
                     // sourceMappingURL: 'bundle-<%= uniqueString %>.min.js.map',
                     // sourceMapPrefix: 2
                 },
                 files: {
-                    '<%= folder.dst %>/js/bundle-<%= uniqueString %>.min.js': ['<%= folder.dst %>/js/menu/controllers.js', '<%= folder.dst %>/js/app.js']
+                    '<%= trgt %>/js/bundle-<%= uniqueString %>.min.js': ['<%= trgt %>/js/menu/controllers.js', '<%= trgt %>/js/app.js']
                 }
             },
-            script_main_dev: {},
-            google_search_tool_dst: {
+            google_search_tool: {
                 options: {
-                    // sourceMap: '<%= folder.dst %>/js/google-search-tool.min.js.map',
+                    // sourceMap: '<%= trgt %>/js/google-search-tool.min.js.map',
                     // sourceMappingUrl: 'google-search-tool.min.js'
                 },
                 files: {
-                    '<%= folder.dst %>/js/google-search-tool.min.js': '<%= folder.dst %>/js/google-search-tool.js'
+                    '<%= trgt %>/js/google-search-tool.min.js': '<%= trgt %>/js/google-search-tool.js'
                 }
-            },
-            google_search_tool_dev: {}
+            }
         },
         copy: {
-            all: {
+            main: {
                 files: [{
                     expand: true,
                     dot: true,
-                    cwd: '<%= folder.src %>/',
-                    dest: target,
-                    src: [
-                      '*.{ico,png,txt,xml}',
-                      'CNAME',
-                      'google*.html',
-                      '.htaccess',
-                      // copy all LESS, SASS and CSS to use Source maps
-                      'css/**/*.*',
-                      // copy all source js files to use Source map
-                      'js/**/*.js',
-                      // copy all html templates
-                      'js/**/*.html',
-                      // images 
-                      'img/**/*.*',
-                      // fonts
-                      'fonts/**/*.*'
-                    ]
+                    cwd: '<%= src %>/',
+                    dest: '<%= trgt %>/',
+                    // Copy all files besides templates and scripts (which assembled separately)
+                    src: ['**/*', '!tpl/**/*', '!js/**/*']
+                }]
+            },
+            bower_js: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    flatten: true,
+                    cwd: '<%= bowerFolder %>/',
+                    dest: '<%= trgt %>/js/',
+                    src: ['es5-shim/es5-shim.js', 'jquery/jquery.js']
+                }]
+            },
+            bower_css: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    flatten: true,
+                    cwd: '<%= bowerFolder %>/',
+                    dest: '<%= trgt %>/css/',
+                    src: []
+                }]
+            },
+            bower_fonts: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    flatten: true,
+                    cwd: '<%= bowerFolder %>/',
+                    dest: '<%= trgt %>/fonts/',
+                    src: []
                 }]
             }
         },
+        // Only for prod mode
         htmlmin: {
-            index_dst: {
+            index: {
                 options: {
                     removeComments: true,
                     collapseWhitespace: true
-                    // // process: function(src, filepath) {},
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= target %>/',
+                    cwd: '<%= trgt %>/',
                     src: '**/index.html',
-                    dest: '<%= target %>/'
+                    dest: '<%= trgt %>/'
                 }]
-            },
-            index_dev: {}
+            }
         },
         less: {
-            dst: {
+            main: {
                 options: {
                     yuicompress: true
                 },
                 files: {
-                    '<%= folder.dst %>/css/site.min.css': '<%= folder.dst %>/css/site.less',
-                    '<%= folder.dst %>/css/bootstrap.min.css': '<%= folder.dst %>/css/bootstrap.less'
-                }
-            },
-            dev: {
-                options: {
-                    yuicompress: false
-                },
-                files: {
-                    '<%= folder.dev %>/css/site.css': '<%= folder.dev %>/css/site.less',
-                    '<%= folder.dev %>/css/bootstrap.css': '<%= folder.dev %>/css/bootstrap.less'
+                    '<%= trgt %>/css/site.min.css': '<%= trgt %>/css/site.less',
+                    '<%= trgt %>/css/bootstrap.min.css': '<%= trgt %>/css/bootstrap.less'
                 }
             }
         },
         assemble: {
             options: {
-                data: 'src/tpl/data.json',
-                layout: 'src/tpl/layouts/default.hbs',
-                partials: ['src/tpl/partials/*.hbs']
-                ////flatten: true
+                engine: 'handlebars',
+                data: '<%= src %>/tpl/data.json',
+                conf: {
+                    isProd: isProd
+                }
             },
-            all: {
+            html: {
+                options: {
+                    layout: 'src/tpl/layouts/default.hbs',
+                    partials: ['src/tpl/partials/*.hbs']
+                },
                 files: [{
                     expand: true,
-                    cwd: 'src/tpl/pages/',
+                    cwd: '<%= src %>/tpl/pages/',
                     src: '**/*.hbs',
-                    dest: '<%= target %>'
+                    dest: '<%= trgt %>'
+                }]
+            },
+            // Assemble js files: replace {{}} to assemble data
+            js: {
+                options: {
+                    ext: '.js'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= src %>/js/',
+                    src: ['**/*.js'],
+                    dest: '<%= trgt %>/js/'
                 }]
             }
         },
-        bower: {
-            dev: {
-                options: {
-                    targetDir: 'dev/js/'
-                }
+        // Watch - only for dev mode
+        watch: {
+            jshint_gruntfile: {
+                files: ['<%= jshint.gruntfile.src %>'],
+                tasks: ['jshint:gruntfile']
             },
-            dst: {
+            jshint_app: {
                 options: {
-                    targetDir: 'dst/js/'
-                }
-            }
-        },
-        // // watch: {
-        // // files: ['**.*.js'],
-        // // tasks: ['jshint']
-        // // },
-        qunit: {
-            all: {
+                    spawn: false
+                },
+                files: ['<%= src %>/js/**/*.js'],
+                tasks: ['jshint:app']
+            },
+            copy_main: {
                 options: {
-                    urls: [
-                      'test/test.html'
-                      // http://localhost:9001/
-                    ]
-                }
+                    cwd: '<%= src %>/',
+                    spawn: false
+                },
+                files: ['**/*', '!tpl/**/*', '!js/**/*'],
+                tasks: ['copy:main']
+            },
+            assemble_data: {
+                files: ['<%= src %>/tpl/data/syst.json', 'package.json'],
+                tasks: ['assemble:html', 'assemble:js']
+            },
+            assemble_html: {
+                files: ['<%= src %>/tpl/**/*.hbs'],
+                tasks: ['assemble:html']
+            },
+            assemble_js: {
+                options: {
+                    spawn: false
+                },
+                files: ['<%= src %>/js/**/*.js'],
+                tasks: ['assemble:js']
             }
         },
         connect: {
@@ -211,20 +226,20 @@ module.exports = function (grunt) {
                     keepalive: true,
                     hostname: 'localhost',
                     port: 9001,
-                    base: target
+                    base: trgt
                 }
             }
         },
         'gh-pages': {
             options: {
-                base: '<%= folder.dst %>'
+                base: '<%= trgt %>'
             },
             src: ['**']
         }
     });
 
-    // grunt.event.on('watch', function(action, filepath, target) {
-    // grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+    // grunt.event.on('watch', function(action, filepath, trgt) {
+    // grunt.log.writeln(trgt + ': ' + filepath + ' has ' + action);
     // });
 
     // These plugins provide necessary tasks.
@@ -236,34 +251,34 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-less');
     //// grunt.loadNpmTasks('grunt-contrib-handlebars');
-    //// grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('assemble');
-    grunt.loadNpmTasks('grunt-bower-task');
-    grunt.loadNpmTasks('grunt-env');
-    grunt.loadNpmTasks('grunt-preprocess');
     // for dev
-    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-connect');
     // for dst
     grunt.loadNpmTasks('grunt-gh-pages');
 
-    // Default task
-    grunt.registerTask('default',
-    ['jshint',
-     'qunit',
+    var tasks = ['jshint',
      'clean:all',
-     'copy:all',
-     'bower:' + target,
-     'uglify:script_main_' + target,
-     'uglify:google_search_tool_' + target,
-     'less:' + target,
-     'assemble:all',
-     'env',
-     'preprocess',
-     'htmlmin:index_' + target
-    ]);
-
-    ////grunt.registerTask('test', ['connect', 'qunit']);
-
-    // grunt gh-pages run separately
+     'copy:main',
+     'copy:bower_js',
+     'copy:bower_css',
+     'copy:bower_fonts',
+     'assemble:js',
+     'assemble:html',
+     'less:main'];
+    
+    if (isProd){
+        var prodTasks = [
+            'uglify:script_main',
+            'uglify:google_search_tool',
+            'htmlmin:index'
+        ];
+        
+        // Make one array for default task
+        tasks = tasks.concat(prodTasks);
+    }
+    
+    // Default task
+    grunt.registerTask('default', tasks);
 };

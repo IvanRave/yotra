@@ -9,11 +9,36 @@
       </sup>
     </h3>
   </div>
-  <div class="col-sm-6">
-    <!-- @if NODE_ENV == 'dst' -->
+  <div class="col-sm-4">
+    {{#if conf.isProd}}
     <div class="reset-box-sizing">
       <div id="cse" style="width: 100%"></div>
     </div>
-    <!-- @endif -->
+    {{/if}}
+  </div>
+  <div class="col-sm-2">
+    <div>
+      <a id="login-vk" href="#">Login VK</a>
+      {{#if conf.isProd}}
+      {{else}}
+      <script type="text/javascript">
+        var vk = {
+          clientId: 3690013,
+          scope: 1,
+          redirectUrl: 'http://localhost:9001/external-logon.html',
+          v: 5.5,
+          display: 'popup'
+        };
+
+        var vkAuthUrl = 'https://oauth.vk.com/authorize?client_id=' + vk.clientId + '&scope=' + vk.scope + '&redirect_uri=' + encodeURIComponent(vk.redirectUrl) + '&v=' + vk.v + '&display=' + vk.display;
+        function op() {
+          var newwindow = window.open(vkAuthUrl, "_blank", "resizable=yes, scrollbars=yes, titlebar=yes, width=800, height=900, top=10, left=10");
+          
+        }
+        
+        document.getElementById('login-vk').onclick = op;
+      </script>
+      {{/if}}
+    </div>
   </div>
 </div>
