@@ -1,7 +1,6 @@
 window.onload = function () {
-    // Get code from url
-    // Get error from url
-
-    var p = document.location.search;
-    console.log(p);
+    // Set to the storage
+    localStorage.setItem('vk_code_response', document.location.search);
+    // Close window
+    window.close();
 };
